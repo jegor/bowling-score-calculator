@@ -27,4 +27,11 @@ public class TestInvalidCases {
 		exception.expect(IllegalArgumentException.class);
 		game.addThrow(11);
 	}
+
+	@Test
+	public void testTooBigFrameResult() throws Exception {
+		exception.expect(IllegalStateException.class);
+		game.addThrow(6);
+		game.addThrow(5);
+	}
 }

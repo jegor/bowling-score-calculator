@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BasicScore {
+public class TestBasicScore {
 
     private Game game;
 
@@ -16,6 +16,12 @@ public class BasicScore {
 
     @Test
     public void testGameStart() throws Exception {
-        assertEquals(new Integer(0), game.getScore());
+        assertEquals((Integer) 0, game.getScore());
+    }
+
+    @Test
+    public void testFirstThrow() throws Exception {
+        game.addThrow(6);
+        assertEquals((Integer) 6, game.getScore());
     }
 }

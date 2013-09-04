@@ -7,24 +7,24 @@ import org.junit.rules.ExpectedException;
 
 public class TestInvalidCases {
 
-    private Game game;
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+	private Game game;
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
-    @Before
-    public void setUp() throws Exception {
-        game = new Game();
-    }
+	@Before
+	public void setUp() throws Exception {
+		game = new Game();
+	}
 
-    @Test
-    public void testNegativeThrowResult() throws Exception {
-        exception.expect(IllegalArgumentException.class);
-        game.addThrow(-1);
-    }
+	@Test
+	public void testNegativeThrowResult() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		game.addThrow(-1);
+	}
 
-    @Test
-    public void testTooBigThrowResult() throws Exception {
-        exception.expect(IllegalArgumentException.class);
-        game.addThrow(11);
-    }
+	@Test
+	public void testTooBigThrowResult() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		game.addThrow(11);
+	}
 }

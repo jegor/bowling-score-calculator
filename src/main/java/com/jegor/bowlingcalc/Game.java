@@ -1,21 +1,32 @@
 package com.jegor.bowlingcalc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
 
 	private Integer score;
+	private List<Frame> frames;
 
 	public Game() {
 		score = 0;
+		frames = new ArrayList<>();
 	}
 
 	public Integer getScore() {
 		return score;
 	}
 
-	public void addThrow(Integer pinsHit) throws IllegalArgumentException {
-		if (pinsHit < 0 || pinsHit > 10)
-			throw new IllegalArgumentException("The number of pins hit should be from 0 to 10");
+	public void addThrow(Integer pinsHit) {
+		Frame frame = loadActiveFrame();
+		frame.addBallThrow(pinsHit);
 		score = score + pinsHit;
+	}
+
+	private Frame loadActiveFrame() {
+		if (frames.isEmpty() || frames.get(frames.size() - 1).isClosed())
+			frames.add(new Frame(false));
+		return frames.get(frames.size() - 1);
 	}
 
 }

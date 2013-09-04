@@ -18,8 +18,7 @@ public class Game {
 	}
 
 	public void addThrow(Integer pinsHit) {
-		Frame frame = loadActiveFrame();
-		frame.addBallThrow(pinsHit);
+		loadActiveFrame().addBallThrow(pinsHit);
 		score = score + pinsHit;
 	}
 

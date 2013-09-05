@@ -12,7 +12,8 @@ public class BowlingScoreCalculator {
 		game = new Game();
 	}
 
-	public void addThrowResult(int pinsHit) {
+	public void addThrowResult(int pinsHit)
+			throws IllegalStateException, IllegalArgumentException{
 		game.addThrowResult(pinsHit);
 	}
 

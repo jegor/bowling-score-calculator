@@ -62,7 +62,8 @@ class Game {
 		return strikeFrameIndex == frames.size() - 1;
 	}
 
-	public void addThrowResult(int pinsHit) {
+	public void addThrowResult(int pinsHit)
+			throws IllegalStateException, IllegalArgumentException {
 		if (!isFinished())
 			loadActiveFrame().addBallThrow(pinsHit);
 		else

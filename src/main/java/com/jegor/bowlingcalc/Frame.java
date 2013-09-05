@@ -17,7 +17,8 @@ class Frame {
 		isStrike = false;
 	}
 
-	void addBallThrow(int pinsHit) {
+	void addBallThrow(int pinsHit)
+			throws IllegalStateException, IllegalArgumentException {
 		BallThrow ballThrow = new BallThrow(pinsHit);
 		if (pinsHit > pinsLeft)
 			throw new IllegalStateException("The number of pins hit in one frame cannot exceed " + BallThrow.MAX_PINS_HIT);

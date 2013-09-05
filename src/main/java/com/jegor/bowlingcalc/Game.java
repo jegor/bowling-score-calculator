@@ -5,7 +5,7 @@ import java.util.List;
 
 class Game {
 
-	private List<Frame> frames;
+	private final List<Frame> frames;
 	final public static int MAX_FRAMES = 10;
 
 	Game() {
@@ -42,13 +42,13 @@ class Game {
 			firstThrowPinsHit = thisFrame.getOneThrowPinsHit(1);
 			secondThrowPinsHit = thisFrame.getOneThrowPinsHit(2);
 
-		} else if (!isLastFrameIndex(currentFrameIndex)) {
+		} else if (hasMoreFramesAfterThisOne(currentFrameIndex)) {
 
 			Frame nextFrame = frames.get(currentFrameIndex + 1);
 			firstThrowPinsHit = nextFrame.getOneThrowPinsHit(0);
 			secondThrowPinsHit = nextFrame.getOneThrowPinsHit(1);
 
-			if (secondThrowPinsHit == null && !isLastFrameIndex(currentFrameIndex + 1)) {
+			if (secondThrowPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1)) {
 				secondThrowPinsHit = frames.get(currentFrameIndex + 2).getOneThrowPinsHit(0);
 			}
 		}
@@ -58,16 +58,17 @@ class Game {
 
 	}
 
-	private boolean isLastFrameIndex(int strikeFrameIndex) {
-		return strikeFrameIndex == frames.size() - 1;
+	private boolean hasMoreFramesAfterThisOne(int strikeFrameIndex) {
+		return strikeFrameIndex < frames.size() - 1;
 	}
 
 	public void addThrowResult(int pinsHit)
 			throws IllegalStateException, IllegalArgumentException {
-		if (!isFinished())
-			loadActiveFrame().addBallThrow(pinsHit);
-		else
+		if (isFinished())
 			throw new IllegalStateException("The game is over. Please start the new one.");
+		else
+			loadActiveFrame().addBallThrow(pinsHit);
+
 	}
 
 	public boolean isFinished() {

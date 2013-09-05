@@ -8,7 +8,7 @@ public class BowlingScoreCalculator {
 		startNewGame();
 	}
 
-	public void startNewGame() {
+	private void startNewGame() {
 		game = new Game();
 	}
 

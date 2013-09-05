@@ -6,7 +6,7 @@ import java.util.List;
 class Frame {
 
 	private final boolean isTenthFrame;
-	private List<BallThrow> ballThrows;
+	private final List<BallThrow> ballThrows;
 	private int pinsLeft;
 	private boolean isStrike;
 
@@ -53,8 +53,8 @@ class Frame {
 	}
 
 	/**
-	 * @param throwIndex - 0 for getting first throw result, 1 - second, etc
-	 * @return
+	 * @param throwIndex 0 for getting first throw result, 1 - second, etc
+	 * @return Number of pins hit as a result of one specific throw specified by throwIndex. null when there is no such throw
 	 */
 	Integer getOneThrowPinsHit(int throwIndex) {
 		return this.ballThrows.size() - 1 < throwIndex ? null : this.ballThrows.get(throwIndex).getPinsHit();

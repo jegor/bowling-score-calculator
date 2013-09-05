@@ -3,27 +3,27 @@ package com.jegor.bowlingcalc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+class Game {
 
 	private List<Frame> frames;
+	final public static int MAX_FRAMES = 10;
 
-	public Game() {
+	Game() {
 		frames = new ArrayList<>();
 	}
 
 	public int getScore() {
 		int score = 0;
-		for (int i = 0; i < frames.size(); i++) {
-			final Frame thisFrame = frames.get(i);
+		for (int currentFrameIndex = 0; currentFrameIndex < frames.size(); currentFrameIndex++) {
+			final Frame thisFrame = frames.get(currentFrameIndex);
 			if (!thisFrame.isFinished())
 				break;
 
 			final int currentFramePinsHit = thisFrame.howManyPinsHit();
 			if (thisFrame.isStrike()) {
-				Integer pinsHitInTwoNextThrows = pinsHitInTwoNextThrows(i);
-				if (pinsHitInTwoNextThrows != null) {
-					score += currentFramePinsHit + pinsHitInTwoNextThrows;
-				}
+				Integer pinsHitInTwoNextThrows = pinsHitInTwoNextThrows(currentFrameIndex);
+				if (pinsHitInTwoNextThrows != null)
+					score += BallThrow.MAX_PINS_HIT + pinsHitInTwoNextThrows;
 			} else {
 				score += currentFramePinsHit;
 			}
@@ -31,47 +31,55 @@ public class Game {
 		return score;
 	}
 
-	private Integer pinsHitInFrameFirstThrow(int currentFrameIndex) {
-		Frame frame = frames.get(currentFrameIndex);
-		return frame.getBallThrows().size() < 1 ? null : frame.getBallThrows().get(0).getPinsHit();
-	}
 
 	private Integer pinsHitInTwoNextThrows(int currentFrameIndex) {
-
-		if (isLastFrame(currentFrameIndex))
-			return null;
-
-		Integer firstThrowPinsHit = pinsHitInFrameFirstThrow(currentFrameIndex + 1);
-		if (firstThrowPinsHit == null)
-			return null;
-
+		Integer firstThrowPinsHit = null;
 		Integer secondThrowPinsHit = null;
-		Frame nextFrame = frames.get(currentFrameIndex + 1);
-		if (nextFrame.getBallThrows().size() >= 2)
-			secondThrowPinsHit = nextFrame.getBallThrows().get(1).getPinsHit();
-		else if (!isLastFrame(currentFrameIndex + 1))
-			secondThrowPinsHit = pinsHitInFrameFirstThrow(currentFrameIndex + 2);
+		Frame thisFrame = frames.get(currentFrameIndex);
 
-		if (secondThrowPinsHit == null)
+		if (thisFrame.isTenthFrame()) {
+
+			firstThrowPinsHit = thisFrame.getOneThrowPinsHit(1);
+			secondThrowPinsHit = thisFrame.getOneThrowPinsHit(2);
+
+		} else if (!isLastFrameIndex(currentFrameIndex)) {
+
+			Frame nextFrame = frames.get(currentFrameIndex + 1);
+			firstThrowPinsHit = nextFrame.getOneThrowPinsHit(0);
+			secondThrowPinsHit = nextFrame.getOneThrowPinsHit(1);
+
+			if (secondThrowPinsHit == null && !isLastFrameIndex(currentFrameIndex + 1)) {
+				secondThrowPinsHit = frames.get(currentFrameIndex + 2).getOneThrowPinsHit(0);
+			}
+		}
+		if (firstThrowPinsHit == null || secondThrowPinsHit == null)
 			return null;
-
 		return firstThrowPinsHit + secondThrowPinsHit;
-
 
 	}
 
-	private boolean isLastFrame(int strikeFrameIndex) {
+	private boolean isLastFrameIndex(int strikeFrameIndex) {
 		return strikeFrameIndex == frames.size() - 1;
 	}
 
-	public void addThrow(int pinsHit) {
-		loadActiveFrame().addBallThrow(pinsHit);
+	public void addThrowResult(int pinsHit) {
+		if (!isFinished())
+			loadActiveFrame().addBallThrow(pinsHit);
+		else
+			throw new IllegalStateException("The game is over. Please start the new one.");
+	}
+
+	public boolean isFinished() {
+		return frames.size() == MAX_FRAMES && frames.get(frames.size() - 1).isFinished();
 	}
 
 	private Frame loadActiveFrame() {
-		if (frames.isEmpty() || frames.get(frames.size() - 1).isFinished())
-			frames.add(new Frame(false));
+		if (frames.isEmpty() || frames.get(frames.size() - 1).isFinished()) {
+			final boolean isTenthFrame = frames.size() == MAX_FRAMES - 1;
+			frames.add(new Frame(isTenthFrame));
+		}
 		return frames.get(frames.size() - 1);
 	}
+
 
 }

@@ -3,16 +3,16 @@ package com.jegor.bowlingcalc;
 class BallThrow {
 
 	private int pinsHit;
-	public static final int minPinsHit = 0;
-	public static final int maxPinsHit = 10;
+	public static final int MIN_PINS_HIT = 0;
+	public static final int MAX_PINS_HIT = 10;
 
 	BallThrow(int pinsHit) {
-		if (pinsHit < minPinsHit || pinsHit > maxPinsHit)
-			throw new IllegalArgumentException("The number of pins hit should be int between " + minPinsHit + " and " + maxPinsHit);
+		if (pinsHit < MIN_PINS_HIT || pinsHit > MAX_PINS_HIT)
+			throw new IllegalArgumentException("The number of pins hit should be int between " + MIN_PINS_HIT + " and " + MAX_PINS_HIT);
 		this.pinsHit = pinsHit;
 	}
 
-	public int getPinsHit() {
+	int getPinsHit() {
 		return pinsHit;
 	}
 }

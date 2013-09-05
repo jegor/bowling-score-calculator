@@ -31,7 +31,7 @@ public class TestInvalidCases {
 	@Test
 	public void testTooBigFrameResult() throws Exception {
 		exception.expect(IllegalStateException.class);
-		game.addThrow(6);
-		game.addThrow(5);
+		game.addThrow(4);
+		game.addThrow(9);
 	}
 }

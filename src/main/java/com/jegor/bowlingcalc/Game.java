@@ -15,20 +15,8 @@ class Game {
 
 	int getScore() {
 		int score = 0;
-		for (int currentFrameIndex = 0; currentFrameIndex < frameCount(); currentFrameIndex++) {
-			final Frame thisFrame = frames.get(currentFrameIndex);
-			if (!thisFrame.isFinished())
-				break;
-
-			final int currentFramePinsKnockedDown = thisFrame.howManyPinsKnockedDown();
-			if (thisFrame.isStrike()) {
-				Integer pinsDownInTwoNextThrows = pinsDownInTwoNextThrows(currentFrameIndex);
-				if (pinsDownInTwoNextThrows != null)
-					score += TOTAL_PINS + pinsDownInTwoNextThrows;
-			} else {
-				score += currentFramePinsKnockedDown;
-			}
-		}
+		for (int currentFrameIndex = 0; currentFrameIndex < frameCount(); currentFrameIndex++)
+			score += getFrameScore(currentFrameIndex);
 		return score;
 	}
 
@@ -91,5 +79,22 @@ class Game {
 		return frames.get(frameCount() - 1);
 	}
 
+	private int getFrameScore(int frameIndex) {
+		int thisFrameScore = 0;
+		final Frame thisFrame = frames.get(frameIndex);
+		if (thisFrame.isFinished()) {
+			final int currentFramePinsKnockedDown = thisFrame.howManyPinsKnockedDown();
+			if (thisFrame.isStrike()) {
+				Integer pinsDownInTwoNextThrows = pinsDownInTwoNextThrows(frameIndex);
+				if (pinsDownInTwoNextThrows != null)
+					thisFrameScore = TOTAL_PINS + pinsDownInTwoNextThrows;
+			} else {
+				thisFrameScore = currentFramePinsKnockedDown;
+			}
+		} else {
+			thisFrameScore = 0;
+		}
+		return thisFrameScore;
+	}
 
 }

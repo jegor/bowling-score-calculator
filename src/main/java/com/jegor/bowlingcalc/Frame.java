@@ -9,12 +9,14 @@ class Frame {
 	private final List<BallRoll> ballRolls;
 	private int pinsLeftUp;
 	private boolean isStrike;
+	private boolean isSpare;
 
 	Frame(boolean isTenthFrame) {
 		this.isTenthFrame = isTenthFrame;
 		ballRolls = new ArrayList<>();
 		pinsLeftUp = Game.TOTAL_PINS;
 		isStrike = false;
+		isSpare = false;
 	}
 
 	void addBallRoll(int pinsDown)
@@ -27,8 +29,14 @@ class Frame {
 
 		pinsLeftUp -= pinsDown;
 
-		if (pinsLeftUp == 0 && countBallRolls() == 1)
-			isStrike = true;
+		if (pinsLeftUp == 0) {
+			switch (countBallRolls()) {
+				case 1:
+					isStrike = true;
+				case 2:
+					isSpare = true;
+			}
+		}
 		if (isTenthFrame && isStrike) {
 			pinsLeftUp = Game.TOTAL_PINS;
 		}
@@ -49,6 +57,10 @@ class Frame {
 
 	boolean isStrike() {
 		return isStrike;
+	}
+
+	boolean isSpare() {
+		return isSpare;
 	}
 
 	int howManyPinsKnockedDown() {

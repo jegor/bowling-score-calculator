@@ -26,6 +26,7 @@ class Frame {
 			throw new IllegalStateException("The number of total pins knocked down in one frame cannot exceed " + Game.TOTAL_PINS);
 
 		pinsLeftUp -= pinsDown;
+
 		if (pinsLeftUp == 0 && countBallRolls() == 1)
 			isStrike = true;
 		if (isTenthFrame && isStrike) {

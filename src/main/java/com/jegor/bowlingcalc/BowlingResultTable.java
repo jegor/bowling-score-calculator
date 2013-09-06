@@ -10,7 +10,7 @@ public class BowlingResultTable extends ResultAbstract {
 	public final Integer activeFrameIndex;
 	public final List<FrameResult> frameResults = new ArrayList<>(Game.MAX_FRAMES);
 
-	public BowlingResultTable(Game game) {
+	BowlingResultTable(Game game) {
 		totalScore = game.getScore();
 		gameIsOver = game.isFinished();
 		activeFrameIndex = game.getActiveFrameIndex();

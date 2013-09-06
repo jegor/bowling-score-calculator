@@ -1,3 +1,5 @@
+package com.jegor.bowlingcalc.test;
+
 import com.jegor.bowlingcalc.BowlingScoreCalculator;
 import org.junit.Before;
 

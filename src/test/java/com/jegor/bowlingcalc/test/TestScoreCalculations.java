@@ -1,3 +1,4 @@
+package com.jegor.bowlingcalc.test;
 
 import org.junit.Test;
 

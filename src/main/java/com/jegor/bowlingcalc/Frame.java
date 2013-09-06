@@ -6,67 +6,68 @@ import java.util.List;
 class Frame {
 
 	private final boolean isTenthFrame;
-	private final List<BallRoll> ballRolls;
+
+	public List<Roll> getRolls() {
+		return rolls;
+	}
+
+	private final List<Roll> rolls;
 	private int pinsLeftUp;
-	private boolean isStrike;
-	private boolean isSpare;
+	private boolean hasStrike;
+	private boolean hasSpare;
 
 	Frame(boolean isTenthFrame) {
 		this.isTenthFrame = isTenthFrame;
-		ballRolls = new ArrayList<>();
+		rolls = new ArrayList<>();
 		pinsLeftUp = Game.TOTAL_PINS;
-		isStrike = false;
-		isSpare = false;
+		hasStrike = false;
+		hasSpare = false;
 	}
 
 	void addBallRoll(int pinsDown)
 			throws IllegalStateException, IllegalArgumentException {
 
-		ballRolls.add(new BallRoll(pinsDown));
-
-		if (pinsDown > pinsLeftUp)
+		if (pinsDown > pinsLeftUp && pinsLeftUp < Game.TOTAL_PINS)
 			throw new IllegalStateException("The number of total pins knocked down in one frame cannot exceed " + Game.TOTAL_PINS);
 
 		pinsLeftUp -= pinsDown;
 
+		final boolean isSpare = pinsLeftUp == 0 && pinsDown < Game.TOTAL_PINS && countBallRolls() == 1;
+		final Roll roll = new Roll(pinsDown, isSpare);
+		rolls.add(roll);
+		hasStrike = roll.isStrike;
+		hasSpare = hasSpare || isSpare;
 		if (pinsLeftUp == 0) {
-			switch (countBallRolls()) {
-				case 1:
-					isStrike = true;
-					break;
-				case 2:
-					isSpare = true;
-			}
 			pinsLeftUp = Game.TOTAL_PINS;
 		}
 	}
 
 	boolean isFinished() {
 		boolean isFinished;
-		int tenthFrameRollsMax = isStrike || isSpare ? 3 : 2;
+		int tenthFrameRollsMax = hasStrike || hasSpare ? 3 : 2;
 		if (isTenthFrame)
 			isFinished = countBallRolls() >= tenthFrameRollsMax;
 		else
-			isFinished = isStrike || countBallRolls() == 2;
+			isFinished = hasStrike || countBallRolls() == 2;
 		return isFinished;
 	}
 
-	private int countBallRolls() {
-		return ballRolls.size();
+	public int countBallRolls() {
+		return rolls.size();
 	}
 
-	boolean isStrike() {
-		return isStrike;
+	boolean hasStrike() {
+		return hasStrike;
 	}
 
-	boolean isSpare() {
-		return isSpare;
+	boolean hasSpare() {
+		return hasSpare;
 	}
 
 	int howManyPinsKnockedDown() {
 		int pinsDown = 0;
-		for (BallRoll ballRoll : ballRolls) {
-			pinsDown += ballRoll.getPinsDown();
+		for (Roll roll : rolls) {
+			pinsDown += roll.getPinsDown();
 		}
 		return pinsDown;
 	}
@@ -76,7 +77,7 @@ class Frame {
 	 * @return Number of pins hit as a result of one specific throw specified by rollIndex. null when there is no such throw
 	 */
 	Integer getNumberOfPinsKnockedDownInOneRoll(int rollIndex) {
-		return countBallRolls() - 1 < rollIndex ? null : this.ballRolls.get(rollIndex).getPinsDown();
+		return countBallRolls() - 1 < rollIndex ? null : this.rolls.get(rollIndex).getPinsDown();
 	}
 
 	boolean isTenthFrame() {

@@ -6,7 +6,7 @@ import java.util.List;
 class Game {
 
 	final static int TOTAL_PINS = 10;
-	final static private int MAX_FRAMES = 10;
+	final static public int MAX_FRAMES = 10;
 	private final List<Frame> frames;
 
 	Game() {
@@ -20,15 +20,25 @@ class Game {
 		loadActiveFrame().addBallRoll(pinsDown);
 	}
 
-	int getScore() {
+	public int getScore() {
 		int score = 0;
-		for (int i = 0; i < frameCount(); i++)
-			score += getFrameScore(i);
+		for (int i = 0; i < frameCount(); i++) {
+			Integer frameScore = getFrameScore(i);
+			if (frameScore != null)
+				score += frameScore;
+		}
 		return score;
 	}
 
-	boolean isFinished() {
+	public boolean isFinished() {
 		return frameCount() == MAX_FRAMES && getLastFrame().isFinished();
+	}
+
+	public Integer getActiveFrameIndex() {
+		if (isFinished())
+			return null;
+		loadActiveFrame();
+		return frameCount() - 1;
 	}
 
 	private Frame loadActiveFrame() {
@@ -37,23 +47,21 @@ class Game {
 		return getLastFrame();
 	}
 
-	private int getFrameScore(int frameIndex) {
-		int thisFrameScore = 0;
+	public Integer getFrameScore(int frameIndex) {
+		Integer thisFrameScore = null;
 		final Frame thisFrame = getFrame(frameIndex);
 		if (thisFrame.isFinished()) {
-			if (thisFrame.isStrike()) {
+			if (thisFrame.hasStrike()) {
 				Integer pinsDownInTwoNextRolls = pinsDownInTwoNextRolls(frameIndex, 0);
 				if (pinsDownInTwoNextRolls != null)
 					thisFrameScore = TOTAL_PINS + pinsDownInTwoNextRolls;
-			} else if (thisFrame.isSpare()) {
+			} else if (thisFrame.hasSpare()) {
 				Integer pinsDownInNextRoll = pinsDownInNextRollAfterCurrent(frameIndex, 1);
 				if (pinsDownInNextRoll != null)
 					thisFrameScore = TOTAL_PINS + pinsDownInNextRoll;
 			} else {
 				thisFrameScore = thisFrame.howManyPinsKnockedDown();
 			}
-		} else {
-			thisFrameScore = 0;
 		}
 		return thisFrameScore;
 	}
@@ -92,11 +100,11 @@ class Game {
 		return secondRollPinsHit;
 	}
 
-	private int frameCount() {
+	public int frameCount() {
 		return frames.size();
 	}
 
-	private Frame getFrame(int frameIndex) {
+	public Frame getFrame(int frameIndex) {
 		return frames.get(frameIndex);
 	}
 

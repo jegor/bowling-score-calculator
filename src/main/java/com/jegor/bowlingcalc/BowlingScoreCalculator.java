@@ -17,6 +17,18 @@ public class BowlingScoreCalculator {
 		return game.getScore();
 	}
 
+	public BowlingResultTable getResultTable() {
+		return new BowlingResultTable(game);
+	}
+
+	public boolean isGameOver() {
+		return game.isFinished();
+	}
+
+	public Integer getActiveFrameIndex() {
+		return game.getActiveFrameIndex();
+	}
+
 	private void startNewGame() {
 		game = new Game();
 	}

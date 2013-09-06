@@ -1,3 +1,5 @@
+package com.jegor.bowlingcalc.test;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

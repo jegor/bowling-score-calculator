@@ -83,13 +83,12 @@ class Game {
 		int thisFrameScore = 0;
 		final Frame thisFrame = frames.get(frameIndex);
 		if (thisFrame.isFinished()) {
-			final int currentFramePinsKnockedDown = thisFrame.howManyPinsKnockedDown();
 			if (thisFrame.isStrike()) {
 				Integer pinsDownInTwoNextThrows = pinsDownInTwoNextThrows(frameIndex);
 				if (pinsDownInTwoNextThrows != null)
 					thisFrameScore = TOTAL_PINS + pinsDownInTwoNextThrows;
 			} else {
-				thisFrameScore = currentFramePinsKnockedDown;
+				thisFrameScore = thisFrame.howManyPinsKnockedDown();
 			}
 		} else {
 			thisFrameScore = 0;

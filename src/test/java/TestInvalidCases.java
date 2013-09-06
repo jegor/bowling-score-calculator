@@ -8,13 +8,13 @@ public class TestInvalidCases extends TestBowlingCalculatorAbstract {
 	public ExpectedException exception = ExpectedException.none();
 
 	@Test
-	public void testNegativeThrowResult() throws Exception {
+	public void testNegativeRollResult() throws Exception {
 		exception.expect(IllegalArgumentException.class);
 		rollBall(-1);
 	}
 
 	@Test
-	public void testTooBigThrowResult() throws Exception {
+	public void testTooBigRollResult() throws Exception {
 		exception.expect(IllegalArgumentException.class);
 		rollBall(11);
 	}
@@ -27,21 +27,34 @@ public class TestInvalidCases extends TestBowlingCalculatorAbstract {
 	}
 
 	@Test
-	public void testTooManySimpleThrows() throws Exception {
+	public void testTooManySimpleRolls() throws Exception {
 		for (int i = 0; i < 10; i++) {
 			rollBall(2);
 			rollBall(5);
 		}
 		exception.expect(IllegalStateException.class);
-		rollBall(1);
+		rollBall(0);
 	}
 
 	@Test
-	public void testTooManyStrikes() throws Exception {
+	public void testGameOverAfterAllStrikes() throws Exception {
 		for (int i = 0; i < 10 + 2; i++)
 			rollBall(10);
 		exception.expect(IllegalStateException.class);
 		rollBall(1);
+	}
+
+	@Test
+	public void testGameOverAfterTenthFrameWithSpare() throws Exception {
+		for (int i = 0; i < 9; i++) {
+			rollBall(2);
+			rollBall(5);
+		}
+		rollBall(7);
+		rollBall(3);
+		rollBall(0);
+		exception.expect(IllegalStateException.class);
+		rollBall(0);
 	}
 
 }

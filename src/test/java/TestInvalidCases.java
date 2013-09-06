@@ -43,4 +43,5 @@ public class TestInvalidCases extends TestBowlingCalculatorAbstract {
 		exception.expect(IllegalStateException.class);
 		rollBall(1);
 	}
+
 }

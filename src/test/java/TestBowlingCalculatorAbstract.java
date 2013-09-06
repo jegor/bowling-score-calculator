@@ -13,4 +13,8 @@ public abstract class TestBowlingCalculatorAbstract {
 	protected void rollBall(int pinsDown) {
 		bowling.addBallRollResult(pinsDown);
 	}
+
+	protected int getScore() {
+		return bowling.getTotalCurrentScore();
+	}
 }

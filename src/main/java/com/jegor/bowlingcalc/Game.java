@@ -5,51 +5,68 @@ import java.util.List;
 
 class Game {
 
+	final static int TOTAL_PINS = 10;
+	final static private int MAX_FRAMES = 10;
 	private final List<Frame> frames;
-	final public static int MAX_FRAMES = 10;
 
 	Game() {
 		frames = new ArrayList<>();
 	}
 
-	public int getScore() {
+	int getScore() {
 		int score = 0;
-		for (int currentFrameIndex = 0; currentFrameIndex < frames.size(); currentFrameIndex++) {
+		for (int currentFrameIndex = 0; currentFrameIndex < frameCount(); currentFrameIndex++) {
 			final Frame thisFrame = frames.get(currentFrameIndex);
 			if (!thisFrame.isFinished())
 				break;
 
-			final int currentFramePinsHit = thisFrame.howManyPinsHit();
+			final int currentFramePinsKnockedDown = thisFrame.howManyPinsKnockedDown();
 			if (thisFrame.isStrike()) {
-				Integer pinsHitInTwoNextThrows = pinsHitInTwoNextThrows(currentFrameIndex);
-				if (pinsHitInTwoNextThrows != null)
-					score += BallThrow.MAX_PINS_HIT + pinsHitInTwoNextThrows;
+				Integer pinsDownInTwoNextThrows = pinsDownInTwoNextThrows(currentFrameIndex);
+				if (pinsDownInTwoNextThrows != null)
+					score += TOTAL_PINS + pinsDownInTwoNextThrows;
 			} else {
-				score += currentFramePinsHit;
+				score += currentFramePinsKnockedDown;
 			}
 		}
 		return score;
 	}
 
+	void addBallRollResult(int pinsDown)
+			throws IllegalStateException, IllegalArgumentException {
+		if (isFinished())
+			throw new IllegalStateException("The game is over. Please start the new one.");
+		else
+			loadActiveFrame().addBallRoll(pinsDown);
 
-	private Integer pinsHitInTwoNextThrows(int currentFrameIndex) {
+	}
+
+	boolean isFinished() {
+		return frameCount() == MAX_FRAMES && getLastFrame().isFinished();
+	}
+
+	private int frameCount() {
+		return frames.size();
+	}
+
+	private Integer pinsDownInTwoNextThrows(int currentFrameIndex) {
 		Integer firstThrowPinsHit = null;
 		Integer secondThrowPinsHit = null;
 		Frame thisFrame = frames.get(currentFrameIndex);
 
 		if (thisFrame.isTenthFrame()) {
 
-			firstThrowPinsHit = thisFrame.getOneThrowPinsHit(1);
-			secondThrowPinsHit = thisFrame.getOneThrowPinsHit(2);
+			firstThrowPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(1);
+			secondThrowPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(2);
 
 		} else if (hasMoreFramesAfterThisOne(currentFrameIndex)) {
 
 			Frame nextFrame = frames.get(currentFrameIndex + 1);
-			firstThrowPinsHit = nextFrame.getOneThrowPinsHit(0);
-			secondThrowPinsHit = nextFrame.getOneThrowPinsHit(1);
+			firstThrowPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(0);
+			secondThrowPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(1);
 
 			if (secondThrowPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1)) {
-				secondThrowPinsHit = frames.get(currentFrameIndex + 2).getOneThrowPinsHit(0);
+				secondThrowPinsHit = frames.get(currentFrameIndex + 2).getNumberOfPinsKnockedDownInOneRoll(0);
 			}
 		}
 		if (firstThrowPinsHit == null || secondThrowPinsHit == null)
@@ -58,29 +75,20 @@ class Game {
 
 	}
 
-	private boolean hasMoreFramesAfterThisOne(int strikeFrameIndex) {
-		return strikeFrameIndex < frames.size() - 1;
-	}
-
-	public void addThrowResult(int pinsHit)
-			throws IllegalStateException, IllegalArgumentException {
-		if (isFinished())
-			throw new IllegalStateException("The game is over. Please start the new one.");
-		else
-			loadActiveFrame().addBallThrow(pinsHit);
-
-	}
-
-	public boolean isFinished() {
-		return frames.size() == MAX_FRAMES && frames.get(frames.size() - 1).isFinished();
+	private boolean hasMoreFramesAfterThisOne(int currentFrameIndex) {
+		return currentFrameIndex < frameCount() - 1;
 	}
 
 	private Frame loadActiveFrame() {
-		if (frames.isEmpty() || frames.get(frames.size() - 1).isFinished()) {
-			final boolean isTenthFrame = frames.size() == MAX_FRAMES - 1;
+		if (frames.isEmpty() || getLastFrame().isFinished()) {
+			final boolean isTenthFrame = frameCount() == MAX_FRAMES - 1;
 			frames.add(new Frame(isTenthFrame));
 		}
-		return frames.get(frames.size() - 1);
+		return getLastFrame();
+	}
+
+	private Frame getLastFrame() {
+		return frames.get(frameCount() - 1);
 	}
 
 

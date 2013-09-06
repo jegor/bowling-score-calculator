@@ -8,17 +8,17 @@ public class BowlingScoreCalculator {
 		startNewGame();
 	}
 
-	private void startNewGame() {
-		game = new Game();
-	}
-
-	public void addThrowResult(int pinsHit)
+	public void addBallRollResult(int pinsDownCount)
 			throws IllegalStateException, IllegalArgumentException{
-		game.addThrowResult(pinsHit);
+		game.addBallRollResult(pinsDownCount);
 	}
 
 	public int getTotalCurrentScore() {
 		return game.getScore();
+	}
+
+	private void startNewGame() {
+		game = new Game();
 	}
 
 

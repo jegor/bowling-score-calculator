@@ -33,21 +33,21 @@ class Frame {
 			switch (countBallRolls()) {
 				case 1:
 					isStrike = true;
+					break;
 				case 2:
 					isSpare = true;
 			}
-		}
-		if (isTenthFrame && isStrike) {
 			pinsLeftUp = Game.TOTAL_PINS;
 		}
 	}
 
 	boolean isFinished() {
 		boolean isFinished;
-		if (!isTenthFrame)
-			isFinished = isStrike || countBallRolls() == 2;
+		int tenthFrameRollsMax = isStrike || isSpare ? 3 : 2;
+		if (isTenthFrame)
+			isFinished = countBallRolls() >= tenthFrameRollsMax;
 		else
-			isFinished = !isStrike && countBallRolls() > 1 || countBallRolls() > 2;
+			isFinished = isStrike || countBallRolls() == 2;
 		return isFinished;
 	}
 

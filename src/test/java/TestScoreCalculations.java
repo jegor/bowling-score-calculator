@@ -102,5 +102,40 @@ public class TestScoreCalculations extends TestBowlingCalculatorAbstract {
 		assertEquals(20, getScore());
 	}
 
+	@Test
+	public void testOneSpare() throws Exception {
+		rollBall(7);
+		rollBall(3);
+		assertEquals(0, getScore());
+	}
 
+	@Test
+	public void testOneSpareAndOneRollAfterIt() throws Exception {
+		rollBall(7);
+		rollBall(3);
+		rollBall(3);
+		assertEquals(13, getScore());
+	}
+
+	@Test
+	public void testAllSpares() throws Exception {
+		for (int i = 0; i < 10; i++) {
+			rollBall(5);
+			rollBall(5);
+		}
+		rollBall(5);
+		assertEquals(150, getScore());
+	}
+
+	/**
+	 * Score calc example from http://bowling.about.com/od/rulesofthegame/a/bowlingscoring.htm
+	 */
+	@Test
+	public void testFullGameExample() throws Exception {
+		int[] rolls = {10, 7, 3, 7, 2, 9, 1, 10, 10, 10, 2, 3, 6, 4, 7, 3, 3};
+		for (int pinsDown : rolls) {
+			rollBall(pinsDown);
+		}
+		assertEquals(168, getScore());
+	}
 }

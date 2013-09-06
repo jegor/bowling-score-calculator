@@ -15,17 +15,16 @@ class Game {
 
 	int getScore() {
 		int score = 0;
-		for (int currentFrameIndex = 0; currentFrameIndex < frameCount(); currentFrameIndex++)
-			score += getFrameScore(currentFrameIndex);
+		for (int i = 0; i < frameCount(); i++)
+			score += getFrameScore(i);
 		return score;
 	}
 
-	void addBallRollResult(int pinsDown)
-			throws IllegalStateException, IllegalArgumentException {
+	void addBallRollResult(int pinsDown) throws IllegalStateException, IllegalArgumentException {
 		if (isFinished())
 			throw new IllegalStateException("The game is over. Please start the new one.");
-		else
-			loadActiveFrame().addBallRoll(pinsDown);
+
+		loadActiveFrame().addBallRoll(pinsDown);
 
 	}
 
@@ -52,15 +51,15 @@ class Game {
 			Frame nextFrame = frames.get(currentFrameIndex + 1);
 			firstThrowPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(0);
 			secondThrowPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(1);
-
-			if (secondThrowPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1)) {
+			if (secondThrowPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1))
 				secondThrowPinsHit = frames.get(currentFrameIndex + 2).getNumberOfPinsKnockedDownInOneRoll(0);
-			}
+
 		}
+
 		if (firstThrowPinsHit == null || secondThrowPinsHit == null)
 			return null;
-		return firstThrowPinsHit + secondThrowPinsHit;
 
+		return firstThrowPinsHit + secondThrowPinsHit;
 	}
 
 	private boolean hasMoreFramesAfterThisOne(int currentFrameIndex) {
@@ -68,11 +67,14 @@ class Game {
 	}
 
 	private Frame loadActiveFrame() {
-		if (frames.isEmpty() || getLastFrame().isFinished()) {
-			final boolean isTenthFrame = frameCount() == MAX_FRAMES - 1;
-			frames.add(new Frame(isTenthFrame));
-		}
+		if (frames.isEmpty() || getLastFrame().isFinished())
+			startNewFrame();
 		return getLastFrame();
+	}
+
+	private void startNewFrame() {
+		final boolean isTenthFrame = frameCount() == MAX_FRAMES - 1;
+		frames.add(new Frame(isTenthFrame));
 	}
 
 	private Frame getLastFrame() {

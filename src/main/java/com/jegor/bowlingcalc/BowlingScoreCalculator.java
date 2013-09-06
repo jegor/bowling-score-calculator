@@ -9,7 +9,7 @@ public class BowlingScoreCalculator {
 	}
 
 	public void addBallRollResult(int pinsDownCount)
-			throws IllegalStateException, IllegalArgumentException{
+			throws IllegalStateException, IllegalArgumentException {
 		game.addBallRollResult(pinsDownCount);
 	}
 
@@ -20,6 +20,5 @@ public class BowlingScoreCalculator {
 	private void startNewGame() {
 		game = new Game();
 	}
-
 
 }

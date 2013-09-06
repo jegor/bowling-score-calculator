@@ -3,7 +3,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestScoreCalculationsAbstract extends TestBowlingCalculatorAbstract {
+public class TestScoreCalculations extends TestBowlingCalculatorAbstract {
 
 	@Test
 	public void testGameStart() throws Exception {

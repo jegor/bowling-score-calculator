@@ -36,30 +36,42 @@ class Game {
 		return frames.size();
 	}
 
-	private Integer pinsDownInTwoNextThrows(int currentFrameIndex) {
-		Integer firstThrowPinsHit = null;
-		Integer secondThrowPinsHit = null;
+	private int pinsDownInNextRoll(int currentFrameIndex) {
+		Integer nextRollPinsHit = null;
+		Frame thisFrame = frames.get(currentFrameIndex);
+		if (thisFrame.isTenthFrame()) {
+			nextRollPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(2);
+		} else {
+			Frame nextFrame = frames.get(currentFrameIndex + 1);
+			nextRollPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(0);
+		}
+		return nextRollPinsHit;
+	}
+
+	private Integer pinsDownInTwoNextRolls(int currentFrameIndex) {
+		Integer firstRollPinsHit = null;
+		Integer secondRollPinsHit = null;
 		Frame thisFrame = frames.get(currentFrameIndex);
 
 		if (thisFrame.isTenthFrame()) {
 
-			firstThrowPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(1);
-			secondThrowPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(2);
+			firstRollPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(1);
+			secondRollPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(2);
 
 		} else if (hasMoreFramesAfterThisOne(currentFrameIndex)) {
 
 			Frame nextFrame = frames.get(currentFrameIndex + 1);
-			firstThrowPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(0);
-			secondThrowPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(1);
-			if (secondThrowPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1))
-				secondThrowPinsHit = frames.get(currentFrameIndex + 2).getNumberOfPinsKnockedDownInOneRoll(0);
+			firstRollPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(0);
+			secondRollPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(1);
+			if (secondRollPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1))
+				secondRollPinsHit = frames.get(currentFrameIndex + 2).getNumberOfPinsKnockedDownInOneRoll(0);
 
 		}
 
-		if (firstThrowPinsHit == null || secondThrowPinsHit == null)
+		if (firstRollPinsHit == null || secondRollPinsHit == null)
 			return null;
 
-		return firstThrowPinsHit + secondThrowPinsHit;
+		return firstRollPinsHit + secondRollPinsHit;
 	}
 
 	private boolean hasMoreFramesAfterThisOne(int currentFrameIndex) {
@@ -86,9 +98,11 @@ class Game {
 		final Frame thisFrame = frames.get(frameIndex);
 		if (thisFrame.isFinished()) {
 			if (thisFrame.isStrike()) {
-				Integer pinsDownInTwoNextThrows = pinsDownInTwoNextThrows(frameIndex);
+				Integer pinsDownInTwoNextThrows = pinsDownInTwoNextRolls(frameIndex);
 				if (pinsDownInTwoNextThrows != null)
 					thisFrameScore = TOTAL_PINS + pinsDownInTwoNextThrows;
+			} else if (thisFrame.isSpare()) {
+				thisFrameScore = TOTAL_PINS + pinsDownInNextRoll(frameIndex);
 			} else {
 				thisFrameScore = thisFrame.howManyPinsKnockedDown();
 			}
@@ -97,5 +111,6 @@ class Game {
 		}
 		return thisFrameScore;
 	}
+
 
 }

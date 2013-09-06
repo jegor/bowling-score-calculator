@@ -1,5 +1,4 @@
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -95,7 +94,6 @@ public class TestScoreCalculations extends TestBowlingCalculatorAbstract {
 	 * Example from http://en.wikipedia.org/wiki/Ten-pin_bowling#Scoring
 	 */
 	@Test
-	@Ignore
 	public void testSpare() throws Exception {
 		rollBall(7);
 		rollBall(3);

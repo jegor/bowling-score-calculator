@@ -6,58 +6,64 @@ import java.util.List;
 class Frame {
 
 	private final boolean isTenthFrame;
-	private final List<BallThrow> ballThrows;
-	private int pinsLeft;
+	private final List<BallRoll> ballRolls;
+	private int pinsLeftUp;
 	private boolean isStrike;
 
 	Frame(boolean isTenthFrame) {
 		this.isTenthFrame = isTenthFrame;
-		ballThrows = new ArrayList<>();
-		pinsLeft = BallThrow.MAX_PINS_HIT;
+		ballRolls = new ArrayList<>();
+		pinsLeftUp = Game.TOTAL_PINS;
 		isStrike = false;
 	}
 
-	void addBallThrow(int pinsHit)
+	void addBallRoll(int pinsDown)
 			throws IllegalStateException, IllegalArgumentException {
-		BallThrow ballThrow = new BallThrow(pinsHit);
-		if (pinsHit > pinsLeft)
-			throw new IllegalStateException("The number of pins hit in one frame cannot exceed " + BallThrow.MAX_PINS_HIT);
-		ballThrows.add(ballThrow);
-		pinsLeft = pinsLeft - pinsHit;
-		if (pinsLeft == 0 && ballThrows.size() == 1)
+
+		ballRolls.add(new BallRoll(pinsDown));
+
+		if (pinsDown > pinsLeftUp)
+			throw new IllegalStateException("The number of total pins knocked down in one frame cannot exceed " + Game.TOTAL_PINS);
+
+		pinsLeftUp -= pinsDown;
+		if (pinsLeftUp == 0 && countBallRolls() == 1)
 			isStrike = true;
 		if (isTenthFrame && isStrike) {
-			pinsLeft = BallThrow.MAX_PINS_HIT;
+			pinsLeftUp = Game.TOTAL_PINS;
 		}
 	}
 
 	boolean isFinished() {
 		boolean isFinished;
 		if (!isTenthFrame)
-			isFinished = isStrike || ballThrows.size() == 2;
+			isFinished = isStrike || countBallRolls() == 2;
 		else
-			isFinished = !isStrike && ballThrows.size() == 2 || ballThrows.size() == 3;
+			isFinished = !isStrike && countBallRolls() > 1 || countBallRolls() > 2;
 		return isFinished;
+	}
+
+	private int countBallRolls() {
+		return ballRolls.size();
 	}
 
 	boolean isStrike() {
 		return isStrike;
 	}
 
-	int howManyPinsHit() {
-		int pinsHit = 0;
-		for (BallThrow ballThrow : ballThrows) {
-			pinsHit += ballThrow.getPinsHit();
+	int howManyPinsKnockedDown() {
+		int pinsDown = 0;
+		for (BallRoll ballRoll : ballRolls) {
+			pinsDown += ballRoll.getPinsDown();
 		}
-		return pinsHit;
+		return pinsDown;
 	}
 
 	/**
-	 * @param throwIndex 0 for getting first throw result, 1 - second, etc
-	 * @return Number of pins hit as a result of one specific throw specified by throwIndex. null when there is no such throw
+	 * @param rollIndex 0 for getting first throw result, 1 - second, etc
+	 * @return Number of pins hit as a result of one specific throw specified by rollIndex. null when there is no such throw
 	 */
-	Integer getOneThrowPinsHit(int throwIndex) {
-		return this.ballThrows.size() - 1 < throwIndex ? null : this.ballThrows.get(throwIndex).getPinsHit();
+	Integer getNumberOfPinsKnockedDownInOneRoll(int rollIndex) {
+		return countBallRolls() - 1 < rollIndex ? null : this.ballRolls.get(rollIndex).getPinsDown();
 	}
 
 	boolean isTenthFrame() {

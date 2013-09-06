@@ -18,37 +18,37 @@ public class TestInvalidCases {
 	@Test
 	public void testNegativeThrowResult() throws Exception {
 		exception.expect(IllegalArgumentException.class);
-		bowling.addThrowResult(-1);
+		bowling.addBallRollResult(-1);
 	}
 
 	@Test
 	public void testTooBigThrowResult() throws Exception {
 		exception.expect(IllegalArgumentException.class);
-		bowling.addThrowResult(11);
+		bowling.addBallRollResult(11);
 	}
 
 	@Test
 	public void testTooBigFrameResult() throws Exception {
 		exception.expect(IllegalStateException.class);
-		bowling.addThrowResult(4);
-		bowling.addThrowResult(9);
+		bowling.addBallRollResult(4);
+		bowling.addBallRollResult(9);
 	}
 
 	@Test
 	public void testTooManySimpleThrows() throws Exception {
 		for (int i = 0; i < 10; i++) {
-			bowling.addThrowResult(2);
-			bowling.addThrowResult(5);
+			bowling.addBallRollResult(2);
+			bowling.addBallRollResult(5);
 		}
 		exception.expect(IllegalStateException.class);
-		bowling.addThrowResult(1);
+		bowling.addBallRollResult(1);
 	}
 
 	@Test
 	public void testTooManyStrikes() throws Exception {
 		for (int i = 0; i < 10 + 2; i++)
-			bowling.addThrowResult(10);
+			bowling.addBallRollResult(10);
 		exception.expect(IllegalStateException.class);
-		bowling.addThrowResult(1);
+		bowling.addBallRollResult(1);
 	}
 }

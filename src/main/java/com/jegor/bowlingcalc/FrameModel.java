@@ -3,23 +3,29 @@ package com.jegor.bowlingcalc;
 import java.util.ArrayList;
 import java.util.List;
 
-class Frame {
+/**
+ * Bowling frame model class
+ *
+ * @author Jegor Guzhvin
+ */
+
+class FrameModel {
 
 	private final boolean isTenthFrame;
 
-	public List<Roll> getRolls() {
+	public List<RollModel> getRolls() {
 		return rolls;
 	}
 
-	private final List<Roll> rolls;
+	private final List<RollModel> rolls;
 	private int pinsLeftUp;
 	private boolean hasStrike;
 	private boolean hasSpare;
 
-	Frame(boolean isTenthFrame) {
+	FrameModel(boolean isTenthFrame) {
 		this.isTenthFrame = isTenthFrame;
 		rolls = new ArrayList<>();
-		pinsLeftUp = Game.TOTAL_PINS;
+		pinsLeftUp = GameModel.TOTAL_PINS;
 		hasStrike = false;
 		hasSpare = false;
 	}
@@ -27,18 +33,18 @@ class Frame {
 	void addBallRoll(int pinsDown)
 			throws IllegalStateException, IllegalArgumentException {
 
-		if (pinsDown > pinsLeftUp && pinsLeftUp < Game.TOTAL_PINS)
-			throw new IllegalStateException("The number of total pins knocked down in one frame cannot exceed " + Game.TOTAL_PINS);
+		if (pinsDown > pinsLeftUp && pinsLeftUp < GameModel.TOTAL_PINS)
+			throw new IllegalStateException("The number of total pins knocked down in one frame cannot exceed " + GameModel.TOTAL_PINS);
 
 		pinsLeftUp -= pinsDown;
 
-		final boolean isSpare = pinsLeftUp == 0 && pinsDown < Game.TOTAL_PINS && countBallRolls() == 1;
-		final Roll roll = new Roll(pinsDown, isSpare);
+		final boolean isSpare = pinsLeftUp == 0 && pinsDown < GameModel.TOTAL_PINS && countBallRolls() == 1;
+		final RollModel roll = new RollModel(pinsDown, isSpare);
 		rolls.add(roll);
-		hasStrike = roll.isStrike;
+		hasStrike = hasStrike || roll.isStrike;
 		hasSpare = hasSpare || isSpare;
 		if (pinsLeftUp == 0) {
-			pinsLeftUp = Game.TOTAL_PINS;
+			pinsLeftUp = GameModel.TOTAL_PINS;
 		}
 	}
 
@@ -66,7 +72,7 @@ class Frame {
 
 	int howManyPinsKnockedDown() {
 		int pinsDown = 0;
-		for (Roll roll : rolls) {
+		for (RollModel roll : rolls) {
 			pinsDown += roll.getPinsDown();
 		}
 		return pinsDown;

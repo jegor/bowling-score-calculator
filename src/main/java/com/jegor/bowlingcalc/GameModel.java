@@ -1,16 +1,21 @@
+/**
+ * Main bowling score model and control class
+ *
+ * @author Jegor Guzhvin
+ */
 package com.jegor.bowlingcalc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class Game {
+class GameModel {
 
 	final static int TOTAL_PINS = 10;
 	final static public int MAX_FRAMES = 10;
-	private final List<Frame> frames;
+	private final List<FrameModel> frames;
 
-	Game() {
-		frames = new ArrayList<>();
+	GameModel() {
+		frames = new ArrayList<>(MAX_FRAMES);
 	}
 
 	void addBallRollResult(int pinsDown) throws IllegalStateException, IllegalArgumentException {
@@ -41,7 +46,7 @@ class Game {
 		return frameCount() - 1;
 	}
 
-	private Frame loadActiveFrame() {
+	private FrameModel loadActiveFrame() {
 		if (frames.isEmpty() || getLastFrame().isFinished())
 			startNewFrame();
 		return getLastFrame();
@@ -49,7 +54,7 @@ class Game {
 
 	public Integer getFrameScore(int frameIndex) {
 		Integer thisFrameScore = null;
-		final Frame thisFrame = getFrame(frameIndex);
+		final FrameModel thisFrame = getFrame(frameIndex);
 		if (thisFrame.isFinished()) {
 			if (thisFrame.hasStrike()) {
 				Integer pinsDownInTwoNextRolls = pinsDownInTwoNextRolls(frameIndex, 0);
@@ -76,11 +81,11 @@ class Game {
 
 	private Integer pinsDownInNextRollAfterCurrent(int currentFrameIndex, int currentRollIndex) {
 		Integer nextRollPinsHit = null;
-		Frame thisFrame = getFrame(currentFrameIndex);
+		FrameModel thisFrame = getFrame(currentFrameIndex);
 		if (thisFrame.isTenthFrame()) {
 			nextRollPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(currentRollIndex + 1);
 		} else if (hasMoreFramesAfterThisOne(currentFrameIndex)) {
-			Frame nextFrame = getFrame(currentFrameIndex + 1);
+			FrameModel nextFrame = getFrame(currentFrameIndex + 1);
 			nextRollPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(0);
 		}
 		return nextRollPinsHit;
@@ -88,11 +93,11 @@ class Game {
 
 	private Integer pinsDownInTheSecondNextRollAfterCurrent(int currentFrameIndex) {
 		Integer secondRollPinsHit = null;
-		Frame thisFrame = getFrame(currentFrameIndex);
+		FrameModel thisFrame = getFrame(currentFrameIndex);
 		if (thisFrame.isTenthFrame()) {
 			secondRollPinsHit = thisFrame.getNumberOfPinsKnockedDownInOneRoll(2);
 		} else if (hasMoreFramesAfterThisOne(currentFrameIndex)) {
-			Frame nextFrame = getFrame(currentFrameIndex + 1);
+			FrameModel nextFrame = getFrame(currentFrameIndex + 1);
 			secondRollPinsHit = nextFrame.getNumberOfPinsKnockedDownInOneRoll(1);
 			if (secondRollPinsHit == null && hasMoreFramesAfterThisOne(currentFrameIndex + 1))
 				secondRollPinsHit = getFrame(currentFrameIndex + 2).getNumberOfPinsKnockedDownInOneRoll(0);
@@ -104,7 +109,7 @@ class Game {
 		return frames.size();
 	}
 
-	public Frame getFrame(int frameIndex) {
+	public FrameModel getFrame(int frameIndex) {
 		return frames.get(frameIndex);
 	}
 
@@ -114,10 +119,10 @@ class Game {
 
 	private void startNewFrame() {
 		final boolean isTenthFrame = frameCount() == MAX_FRAMES - 1;
-		frames.add(new Frame(isTenthFrame));
+		frames.add(new FrameModel(isTenthFrame));
 	}
 
-	private Frame getLastFrame() {
+	private FrameModel getLastFrame() {
 		return getFrame(frameCount() - 1);
 	}
 

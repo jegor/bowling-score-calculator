@@ -128,6 +128,15 @@ public class TestScoreCalculations extends TestBowlingCalculatorAbstract {
 		assertEquals(150, getScore());
 	}
 
+	@Test
+	public void testTenthFrameWithStrike() throws Exception {
+		int[] rolls = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 3, 3};
+		for (int pinsDown : rolls) {
+			rollBall(pinsDown);
+		}
+		assertEquals(279, getScore());
+	}
+
 	/**
 	 * Score calc example from http://bowling.about.com/od/rulesofthegame/a/bowlingscoring.htm
 	 */

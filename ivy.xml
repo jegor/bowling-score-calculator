@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ivy-module version="2.0">
+	<info organisation="ee.jegor" module="bowlingcalc"/>
+	<configurations>
+		<conf name="default" description="for runtime"/>
+		<conf name="test"/>
+	</configurations>
+	<dependencies defaultconf="default->default">
+		<dependency org="junit" name="junit" rev="4.11+" conf="test->default"/>
+		<dependency org="com.google.code.gson" name="gson" rev="2.2.4+"/>
+	</dependencies>
+</ivy-module>

@@ -28,7 +28,7 @@ public class ScoreCalculationsTest extends BowlingTestHelper {
 	}
 
 	@Test
-	public void testJustStrike() throws Exception {
+	public void testJustOneStrike() throws Exception {
 		rollBall(10);
 		assertEquals(0, getScore());
 	}

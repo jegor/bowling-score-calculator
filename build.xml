@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="jegor-bowlingcalc" default="fetch-jars">
 
 	<property name="ivy.version" value="2.2.0"/>
@@ -8,7 +9,8 @@
 
 	<target name="install-ivy">
 		<mkdir dir="lib"/>
-		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar" dest="lib/ivy.jar" usetimestamp="true"/>
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
+			 dest="lib/ivy.jar" usetimestamp="true"/>
 		<path id="ivy.lib.path">
 			<fileset dir="lib" includes="*.jar"/>
 		</path>

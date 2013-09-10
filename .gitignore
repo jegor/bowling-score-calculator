@@ -3,3 +3,11 @@
 /*.iml
 /.idea
 /atlassian-ide-plugin.xml
+/javadoc
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear

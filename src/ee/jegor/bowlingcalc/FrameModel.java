@@ -41,6 +41,7 @@ class FrameModel {
 		final boolean isSpare = pinsLeftUp == 0 && pinsDown < GameModel.TOTAL_PINS && getRollsCount() == 1;
 		final RollModel roll = new RollModel(pinsDown, isSpare);
 		rolls.add(roll);
+
 		hasStrike = hasStrike || roll.isStrike;
 		hasSpare = hasSpare || isSpare;
 		if (pinsLeftUp == 0)

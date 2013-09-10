@@ -4,6 +4,7 @@
 /.idea
 /atlassian-ide-plugin.xml
 /javadoc
+/out
 
 *.class
 
